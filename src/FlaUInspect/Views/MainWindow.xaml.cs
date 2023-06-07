@@ -1,7 +1,7 @@
-﻿using System.Reflection;
+﻿using FlaUInspect.ViewModels;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using FlaUInspect.ViewModels;
 
 namespace FlaUInspect.Views
 {
@@ -16,8 +16,6 @@ namespace FlaUInspect.Views
         {
             InitializeComponent();
             AppendVersionToTitle();
-            Height = 550;
-            Width = 700;
             Loaded += MainWindow_Loaded;
             _vm = new MainViewModel();
             DataContext = _vm;
@@ -42,6 +40,7 @@ namespace FlaUInspect.Views
                     Close();
                 }
                 _vm.Initialize(dlg.SelectedAutomationType);
+
                 Loaded -= MainWindow_Loaded;
             }
         }

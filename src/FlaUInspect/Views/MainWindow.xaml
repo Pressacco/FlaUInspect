@@ -7,9 +7,12 @@
         xmlns:models="clr-namespace:FlaUInspect.Models"
         xmlns:flauidef="clr-namespace:FlaUI.Core.Definitions;assembly=FlaUI.Core"
         xmlns:viewModels="clr-namespace:FlaUInspect.ViewModels"
-        Title="FlaUInspect" d:DesignHeight="350" d:DesignWidth="500" d:LayoutOverrides="Width, Height" ResizeMode="CanResizeWithGrip">
+        Width="1024"
+        Height="768"
+        WindowStartupLocation="CenterScreen"
+        Title="FlaUInspect" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
-        <Style x:Key="SelectableLabel" TargetType="{x:Type TextBox}">
+<Style x:Key="SelectableLabel" TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="IsReadOnly" Value="True" />
