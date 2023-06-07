@@ -1,17 +1,19 @@
-﻿using System;
+﻿using FlaUI.Core;
+using FlaUI.Core.AutomationElements;
+using FlaUI.UIA2;
+using FlaUI.UIA3;
+using FlaUInspect.Core;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
-using FlaUI.Core;
-using FlaUI.Core.AutomationElements;
-using FlaUI.UIA2;
-using FlaUI.UIA3;
-using FlaUInspect.Core;
-using Microsoft.Win32;
+using Debug = System.Diagnostics.Debug;
 
 namespace FlaUInspect.ViewModels
 {
@@ -22,6 +24,8 @@ namespace FlaUInspect.ViewModels
         private ITreeWalker _treeWalker;
         private AutomationBase _automation;
         private AutomationElement _rootElement;
+
+        private MouseMovementMonitor _mouseMovementMonitor;
 
         public MainViewModel()
         {
@@ -50,6 +54,20 @@ namespace FlaUInspect.ViewModels
             {
                 RefreshTree();
             });
+
+            _mouseMovementMonitor = new MouseMovementMonitor();
+            _mouseMovementMonitor.MouseMoved += OnMouseMoved;
+        }
+
+        private void OnMouseMoved(object sender, Point lastPosition)
+        {
+            Debug.WriteLine($"Cursor: {lastPosition}");
+        }
+
+        public Point LastMousePosition
+        {
+            get { return GetProperty<Point>(); }
+            private set { SetProperty(value); }
         }
 
         public bool IsInitialized
@@ -131,7 +149,7 @@ namespace FlaUInspect.ViewModels
             // Initialize hover
             _hoverMode = new HoverMode(_automation);
             _hoverMode.ElementHovered += ElementToSelectChanged;
-            this.EnableHoverMode = true;
+            EnableHoverMode = true;
 
             // Initialize focus tracking
             _focusTrackingMode = new FocusTrackingMode(_automation);
@@ -140,6 +158,8 @@ namespace FlaUInspect.ViewModels
 
         private void ElementToSelectChanged(AutomationElement obj)
         {
+            LastMousePosition = _mouseMovementMonitor.LastPosition;
+
             // Build a stack from the root to the hovered item
             var pathToRoot = new Stack<AutomationElement>();
             while (obj != null)

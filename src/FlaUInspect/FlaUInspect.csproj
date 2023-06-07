@@ -74,6 +74,7 @@
     <Compile Include="Core\ExtendedObservableCollection.cs" />
     <Compile Include="Core\FocusTrackingMode.cs" />
     <Compile Include="Core\HoverMode.cs" />
+    <Compile Include="Core\MouseMovementMonitor.cs" />
     <Compile Include="Core\ObservableObject.cs" />
     <Compile Include="Core\RelayCommand.cs" />
     <Compile Include="Models\Element.cs" />

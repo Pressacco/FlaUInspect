@@ -58,6 +58,13 @@
                         </TextBox>
                     </StackPanel>
                 </StatusBarItem>
+                <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Last Mouse Position: "/>
+                        <TextBox IsReadOnly="True" MinWidth="75"
+                                 Text="{Binding LastMousePosition, Mode=OneWay}"/>
+                    </StackPanel>
+                </StatusBarItem>
             </StatusBar>
             <Grid>
                 <Grid.ColumnDefinitions>
