@@ -61,7 +61,7 @@ namespace FlaUInspect.ViewModels
 
         private void OnMouseMoved(object sender, Point lastPosition)
         {
-            Debug.WriteLine($"Cursor: {lastPosition}");
+            this.LastMousePosition = _mouseMovementMonitor.LastPosition;
         }
 
         public Point LastMousePosition
@@ -158,8 +158,6 @@ namespace FlaUInspect.ViewModels
 
         private void ElementToSelectChanged(AutomationElement obj)
         {
-            LastMousePosition = _mouseMovementMonitor.LastPosition;
-
             // Build a stack from the root to the hovered item
             var pathToRoot = new Stack<AutomationElement>();
             while (obj != null)
