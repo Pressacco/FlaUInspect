@@ -1,5 +1,6 @@
 ﻿using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.WindowsAPI;
 using FlaUI.UIA2;
 using FlaUI.UIA3;
 using FlaUInspect.Core;
@@ -13,12 +14,12 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
-using Debug = System.Diagnostics.Debug;
 
 namespace FlaUInspect.ViewModels
 {
     public class MainViewModel : ObservableObject
     {
+        private string _windowTitle;
         private HoverMode _hoverMode;
         private FocusTrackingMode _focusTrackingMode;
         private ITreeWalker _treeWalker;
@@ -27,8 +28,10 @@ namespace FlaUInspect.ViewModels
 
         private MouseMovementMonitor _mouseMovementMonitor;
 
-        public MainViewModel()
+        public MainViewModel(string windowTitle)
         {
+            _windowTitle = windowTitle;
+
             Elements = new ObservableCollection<ElementViewModel>();
             StartNewInstanceCommand = new RelayCommand(o =>
             {
@@ -85,6 +88,18 @@ namespace FlaUInspect.ViewModels
                 {
                     if (value) { _hoverMode.Start(); }
                     else { _hoverMode.Stop(); }
+                }
+            }
+        }
+
+        public bool EnableAlwaysOnTop
+        {
+            get { return GetProperty<bool>(); }
+            set
+            {
+                if (SetProperty(value))
+                {
+                    FlaUInspect.Windows.User32.AlwaysOnTop(_windowTitle, value);
                 }
             }
         }

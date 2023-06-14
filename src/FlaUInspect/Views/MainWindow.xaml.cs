@@ -17,7 +17,7 @@ namespace FlaUInspect.Views
             InitializeComponent();
             AppendVersionToTitle();
             Loaded += MainWindow_Loaded;
-            _vm = new MainViewModel();
+            _vm = new MainViewModel(this.Title);
             DataContext = _vm;
         }
 
