@@ -70,6 +70,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\AutomationPropertyExtensions.cs" />
+    <Compile Include="Core\CursorPositionEventArgs.cs" />
     <Compile Include="Core\ElementHighlighter.cs" />
     <Compile Include="Core\ElementHoveredEventArgs.cs" />
     <Compile Include="Core\ExtendedObservableCollection.cs" />

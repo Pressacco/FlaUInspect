@@ -62,9 +62,9 @@ namespace FlaUInspect.ViewModels
             _mouseMovementMonitor.MouseMoved += OnMouseMoved;
         }
 
-        private void OnMouseMoved(object sender, Point lastPosition)
+        private void OnMouseMoved(object sender, CursorPositionEventArgs e)
         {
-            this.LastMousePosition = _mouseMovementMonitor.LastPosition;
+            this.LastMousePosition = e.DesktopPosition;
         }
 
         public Point LastMousePosition
