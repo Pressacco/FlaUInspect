@@ -1,13 +1,15 @@
 ﻿using FlaUInspect.Core;
 
 using System;
+using System.Diagnostics.Tracing;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
 
 public class MouseMovementMonitor
 {
-    private double Tolerance = 0.1;
+    private double PositionTolerance = 0.1;
+    private TimeSpan ElapsedTolerance = TimeSpan.FromSeconds(2);
 
     private struct POINT
     {
@@ -42,14 +44,19 @@ public class MouseMovementMonitor
 
     private readonly DispatcherTimer _timer;
     private Point _lastPosition;
+    private DateTime _lastCaptureRequested;
 
-    internal event EventHandler<CursorPositionEventArgs> MouseMoved;
+    internal event EventHandler<CursorPositionEventArgs> PositionChanged;
+
+    internal event EventHandler<CursorPositionEventArgs> CaptureRequested;
 
     public MouseMovementMonitor()
     {
+        _lastCaptureRequested = DateTime.Now;
+
         _timer = new DispatcherTimer();
         _timer.Interval = TimeSpan.FromMilliseconds(500);
-        _timer.Tick += Timer_Tick;
+        _timer.Tick += OnTimerElapased;
         _timer.Start();
     }
 
@@ -66,21 +73,45 @@ public class MouseMovementMonitor
         return appOrigin;
     }
 
-    private void Timer_Tick(object sender, EventArgs e)
+    private void OnTimerElapased(object sender, EventArgs e)
     {
+        var isNewPosition = false;
+        var isCaptureRequested = false;
+
         if (GetCursorPos(out POINT point))
         {
-            if (Math.Abs(point.X - _lastPosition.X) > Tolerance || Math.Abs(point.Y - _lastPosition.Y) > Tolerance)
+            if (Math.Abs(point.X - _lastPosition.X) > PositionTolerance || Math.Abs(point.Y - _lastPosition.Y) > PositionTolerance)
             {
-                _lastPosition = new Point(point.X, point.Y);
+                isNewPosition = true;
+            }
 
+            if (DateTime.Now.Subtract(_lastCaptureRequested) > ElapsedTolerance &&
+                System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Alt) &&
+                System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Shift))
+            {
+                isCaptureRequested = true;
+            }
+
+            if (isNewPosition || isCaptureRequested)
+            {
                 POINT appOrigin = GetAppOrigin();
                 var appPosition = new Point(point.X - appOrigin.X, point.Y - appOrigin.Y);
                 var desktopPosition = new Point(point.X, point.Y);
                 var programPosition = GetProgramPosition(point);
 
                 var eventArgs = new CursorPositionEventArgs(programPosition, desktopPosition);
-                MouseMoved?.Invoke(this, eventArgs);
+
+                if (isNewPosition)
+                {
+                    _lastPosition = new Point(point.X, point.Y);
+                    this.PositionChanged?.Invoke(this, eventArgs);
+                }
+
+                if (isCaptureRequested)
+                {
+                    _lastCaptureRequested = DateTime.Now;
+                    this.CaptureRequested?.Invoke(this, eventArgs);
+                }
             }
         }
     }

@@ -59,10 +59,26 @@ namespace FlaUInspect.ViewModels
             });
 
             _mouseMovementMonitor = new MouseMovementMonitor();
-            _mouseMovementMonitor.MouseMoved += OnMouseMoved;
+            _mouseMovementMonitor.PositionChanged += OnPositionChanged;
+            _mouseMovementMonitor.CaptureRequested += OnCaptureRequested;
         }
 
-        private void OnMouseMoved(object sender, CursorPositionEventArgs e)
+        private void OnCaptureRequested(object sender, CursorPositionEventArgs e)
+        {
+            var now = DateTime.Now.ToString("hh:mm:ss");
+
+            var originalText = this.Output;
+
+            this.Output = $"{now}\t Mouse on desktop: {e.DesktopPosition}\r\n" + originalText;
+        }
+
+        public string Output
+        {
+            get { return GetProperty<string>(); }
+            set { SetProperty(value); }
+        }
+
+        private void OnPositionChanged(object sender, CursorPositionEventArgs e)
         {
             this.LastMousePosition = e.DesktopPosition;
         }

@@ -62,9 +62,9 @@
                 </StatusBarItem>
                 <StatusBarItem>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Last Mouse Position: "/>
-                        <TextBox IsReadOnly="True" MinWidth="75"
-                                 Text="{Binding LastMousePosition, Mode=OneWay}"/>
+                        <Label Content="Mouse: "/>
+                        <Label MinWidth="75"
+                                 Content="{Binding LastMousePosition, Mode=OneWay}"/>
                     </StackPanel>
                 </StatusBarItem>
             </StatusBar>
@@ -74,6 +74,10 @@
                     <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
                 <GroupBox Header="{Binding SelectedAutomationType, FallbackValue=None}" Grid.Column="0">
                     <TreeView ItemsSource="{Binding Elements}">
                         <TreeView.ItemContainerStyle>
@@ -275,6 +279,13 @@
                         </ItemsControl>
                     </GroupBox>
                 </ScrollViewer>
+
+                <GroupBox Header="Output" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+                    <TextBox x:Name="OutputTextBox" IsReadOnly="True" VerticalScrollBarVisibility="Auto" 
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        TextWrapping="Wrap" AcceptsReturn="True" 
+                             Text="{Binding Output}"/>
+                </GroupBox>
             </Grid>
         </DockPanel>
     </Grid>
