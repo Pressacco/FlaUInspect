@@ -58,6 +58,11 @@ namespace FlaUInspect.ViewModels
                 RefreshTree();
             });
 
+            ClearOutputCommand = new RelayCommand(o =>
+            {
+                this.Output = string.Empty;
+            });
+
             _mouseMovementMonitor = new MouseMovementMonitor();
             _mouseMovementMonitor.PositionChanged += OnPositionChanged;
             _mouseMovementMonitor.CaptureRequested += OnCaptureRequested;
@@ -152,6 +157,8 @@ namespace FlaUInspect.ViewModels
         public ICommand CaptureSelectedItemCommand { get; private set; }
 
         public ICommand RefreshCommand { get; private set; }
+
+        public ICommand ClearOutputCommand { get; private set; }
 
         public ObservableCollection<DetailGroupViewModel> SelectedItemDetails => SelectedItemInTree?.ItemDetails;
 
