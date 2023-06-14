@@ -14,7 +14,7 @@ namespace FlaUInspect.Core
         private readonly DispatcherTimer _dispatcherTimer;
         private AutomationElement _currentHoveredElement;
 
-        public event Action<AutomationElement> ElementHovered;
+        internal event EventHandler<ElementHoveredEventArgs> ElementHovered;
 
         public HoverMode(AutomationBase automation)
         {
@@ -51,15 +51,15 @@ namespace FlaUInspect.Core
                     {
                         return;
                     }
-                    if (!Equals(_currentHoveredElement, hoveredElement))
+
+                    var hasChanged = !Equals(_currentHoveredElement, hoveredElement);
+
+                    if (hasChanged)
                     {
                         _currentHoveredElement = hoveredElement;
-                        ElementHovered?.Invoke(hoveredElement);
                     }
-                    else
-                    {
-                        ElementHighlighter.HighlightElement(hoveredElement);
-                    }
+
+                    this.ElementHovered?.Invoke(this, new ElementHoveredEventArgs(hoveredElement, hasChanged));
                 }
                 catch (UnauthorizedAccessException)
                 {

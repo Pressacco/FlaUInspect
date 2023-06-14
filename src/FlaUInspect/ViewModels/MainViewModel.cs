@@ -163,12 +163,21 @@ namespace FlaUInspect.ViewModels
 
             // Initialize hover
             _hoverMode = new HoverMode(_automation);
-            _hoverMode.ElementHovered += ElementToSelectChanged;
+            _hoverMode.ElementHovered += HoveredOverElement;
             EnableHoverMode = true;
 
             // Initialize focus tracking
             _focusTrackingMode = new FocusTrackingMode(_automation);
             _focusTrackingMode.ElementFocused += ElementToSelectChanged;
+        }
+
+        private void HoveredOverElement(object sender, ElementHoveredEventArgs e)
+        {
+            if (e.HasChanged)
+            {
+                ElementHighlighter.HighlightElement(e.Element);
+                ElementToSelectChanged(e.Element);
+            }
         }
 
         private void ElementToSelectChanged(AutomationElement obj)

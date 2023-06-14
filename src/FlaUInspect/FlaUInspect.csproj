@@ -71,6 +71,7 @@
     </ApplicationDefinition>
     <Compile Include="Core\AutomationPropertyExtensions.cs" />
     <Compile Include="Core\ElementHighlighter.cs" />
+    <Compile Include="Core\ElementHoveredEventArgs.cs" />
     <Compile Include="Core\ExtendedObservableCollection.cs" />
     <Compile Include="Core\FocusTrackingMode.cs" />
     <Compile Include="Core\HoverMode.cs" />
