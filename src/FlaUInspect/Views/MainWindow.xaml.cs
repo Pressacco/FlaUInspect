@@ -40,6 +40,7 @@ namespace FlaUInspect.Views
                     Close();
                 }
                 _vm.Initialize(dlg.SelectedAutomationType);
+                _vm.EnableAlwaysOnTop = true;
 
                 Loaded -= MainWindow_Loaded;
             }
