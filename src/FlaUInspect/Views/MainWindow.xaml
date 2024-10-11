@@ -45,6 +45,11 @@
             </Menu>
             <StatusBar DockPanel.Dock="Bottom">
                 <StatusBarItem>
+                    <StackPanel Orientation="Horizontal">
+                        <Label MinWidth="50" Content="{Binding CurrentTime, Mode=OneWay, FallbackValue=00:00:00}"/>
+                    </StackPanel>
+                </StatusBarItem>
+                <StatusBarItem>
                     <Label Content="{Binding SelectedAutomationType, FallbackValue=None}" />
                 </StatusBarItem>
                 <StatusBarItem>

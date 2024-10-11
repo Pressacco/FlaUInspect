@@ -14,6 +14,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using System.Timers;
 
 namespace FlaUInspect.ViewModels
 {
@@ -27,6 +28,8 @@ namespace FlaUInspect.ViewModels
         private AutomationElement _rootElement;
 
         private MouseMovementMonitor _mouseMovementMonitor;
+
+        private Timer _timer;
 
         public MainViewModel(string windowTitle)
         {
@@ -66,6 +69,21 @@ namespace FlaUInspect.ViewModels
             _mouseMovementMonitor = new MouseMovementMonitor();
             _mouseMovementMonitor.PositionChanged += OnPositionChanged;
             _mouseMovementMonitor.CaptureRequested += OnCaptureRequested;
+
+            _timer = new Timer(1000);
+            _timer.Elapsed += OnTimerElapsed;
+            _timer.Start();
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            this.CurrentTime = DateTime.Now.ToString("hh:mm:ss");
+        }
+
+        public string CurrentTime
+        {
+            get { return GetProperty<string>(); }
+            set { SetProperty(value); }
         }
 
         private void OnCaptureRequested(object sender, CursorPositionEventArgs e)
